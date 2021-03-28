@@ -5,6 +5,7 @@ extern crate diesel_migrations;
 
 mod schema;
 mod db;
+mod ui;
 
 fn main() {
     println!("Opening connection...");
@@ -16,4 +17,7 @@ fn main() {
     db::run_migrations(&connection);
 
     println!("Done!");
+
+    ui::launch()
+        .unwrap_or_else(|_| panic!("Error launching UI"));
 }
