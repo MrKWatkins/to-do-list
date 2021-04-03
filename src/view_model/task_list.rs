@@ -8,7 +8,7 @@ pub struct TaskListViewModel {
 }
 
 impl TaskListViewModel {
-    pub fn new(tasks: &Vec<Task>) -> TaskListViewModel {
+    pub fn new(tasks: &[Task]) -> TaskListViewModel {
         return TaskListViewModel {
             items: Arc::new(tasks.iter().map(|task| TaskViewModel::new(&task)).collect())
         };

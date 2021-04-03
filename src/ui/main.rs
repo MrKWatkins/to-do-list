@@ -3,7 +3,7 @@ use crate::view_model::AppViewModel;
 use crate::ui::create_app;
 use druid::{PlatformError, WindowDesc, AppLauncher};
 
-pub fn launch(tasks: &Vec<Task>) -> Result<(), PlatformError> {
+pub fn launch(tasks: &[Task]) -> Result<(), PlatformError> {
 
     let app = AppViewModel::new(tasks);
 

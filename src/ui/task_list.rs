@@ -15,6 +15,5 @@ fn create_list_item() -> impl Widget<TaskViewModel>
     return Label::dynamic(|name: &String, _| name.to_string()).lens(TaskViewModel::name)
         .align_vertical(UnitPoint::LEFT)
         .padding(10.0)
-        .expand()
-        .height(50.0);
+        .expand_width();
 }
