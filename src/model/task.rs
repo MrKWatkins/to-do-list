@@ -15,12 +15,12 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn get_open(connection: &SqliteConnection, id: i32) -> Vec<Task>
+    pub fn get_open(connection: &SqliteConnection) -> Vec<Task>
     {
         return tasks::dsl::tasks
             .filter(columns::completed.is_null())
             .load::<Task>(connection)
-            .expect(&format!("Error retrieving task with ID {}.", id));
+            .expect("Error retrieving open tasks.");
     }
 
     pub fn get_by_id(connection: &SqliteConnection, id: i32) -> Task

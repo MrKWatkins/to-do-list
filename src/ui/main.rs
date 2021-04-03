@@ -1,16 +1,17 @@
-use druid::{PlatformError, WindowDesc, AppLauncher, Widget};
-use druid::widget::Label;
+use crate::model::Task;
+use crate::view_model::AppViewModel;
+use crate::ui::create_app;
+use druid::{PlatformError, WindowDesc, AppLauncher};
 
-pub fn launch() -> Result<(), PlatformError> {
-    let window = WindowDesc::new(build);
+pub fn launch(tasks: &Vec<Task>) -> Result<(), PlatformError> {
+
+    let app = AppViewModel::new(tasks);
+
+    let window = WindowDesc::new(create_app);
 
     AppLauncher::with_window(window)
         .use_simple_logger()
-        .launch(())?;
+        .launch(app)?;
 
     return Ok(());
-}
-
-fn build() -> impl Widget<()> {
-    return Label::new("TODO");
 }
