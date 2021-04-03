@@ -5,7 +5,8 @@ authors = ["MrKWatkins <mrkwatkins@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-diesel = { version = "1.4.6", features = ["sqlite"] }
+chrono = "0.4.19"
+diesel = { version = "1.4.6", features = ["sqlite", "chrono"] }
 diesel_migrations = { version = "1.4.0", features = ["sqlite"] }
 dotenv = "0.15.0"
 druid = "0.7.0"

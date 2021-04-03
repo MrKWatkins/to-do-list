@@ -6,6 +6,7 @@ extern crate diesel_migrations;
 mod schema;
 mod db;
 mod ui;
+mod model;
 
 fn main() {
     println!("Opening connection...");
