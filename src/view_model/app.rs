@@ -15,7 +15,7 @@ impl AppViewModel {
             today: TaskListViewModel::new(tasks),
             this_week: TaskListViewModel::new(&tasks[1..]),
             other: TaskListViewModel::new(&tasks[2..]),
-            selected_task: Some(TaskViewModel::new(&tasks[0]))
+            selected_task: None//Some(TaskViewModel::new(&tasks[0]))
         }
     }
 }
