@@ -2,7 +2,7 @@ use crate::view_model::AppViewModel;
 use relm::{connect, Relm, Update, Widget, init};
 use relm_derive::Msg;
 use gtk::prelude::*;
-use gtk::{Orientation, Window, Inhibit, WindowType, Box as GtkBox, ContainerExt};
+use gtk::{Orientation, Window, Inhibit, WindowType, Box as GtkBox, ContainerExt, Builder};
 use crate::ui::task_list::TaskList;
 
 pub fn run(view_model: AppViewModel) -> Result<(), ()> {
@@ -45,17 +45,12 @@ impl Widget for App {
     }
 
     fn view(relm: &Relm<Self>, model: AppViewModel) -> App {
-        let window = Window::new(WindowType::Toplevel);
+        let glade = include_str!("app.glade");
+        let builder = Builder::from_string(glade);
+
+        let window: Window = builder.get_object("window").unwrap();
 
         connect!(relm, window, connect_delete_event(_, _), return (Some(AppMessage::Quit), Inhibit(false)));
-
-        let container = GtkBox::new(Orientation::Horizontal, 0);
-
-        container.add(init::<TaskList>(model.today.clone()).expect("Today List").widget());
-        container.add(init::<TaskList>(model.this_week.clone()).expect("This Week List").widget());
-        container.add(init::<TaskList>(model.other.clone()).expect("Other List").widget());
-
-        window.add(&container);
 
         window.show_all();
 
