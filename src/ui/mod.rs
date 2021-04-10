@@ -4,8 +4,10 @@ mod app;
 mod main;
 mod task_view;
 mod task_list;
+mod theme;
 
 pub use self::app::*;
 pub use self::main::*;
 pub use self::task_list::*;
 pub use self::task_view::*;
+pub use self::theme::*;

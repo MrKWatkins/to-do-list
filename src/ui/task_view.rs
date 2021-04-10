@@ -1,21 +1,19 @@
 use crate::view_model::TaskViewModel;
-use druid::widget::{Flex, TextBox};
-use druid::{Widget, WidgetExt};
-use crate::ui::lens::{OptionLens, IsSomeLens};
-use crate::ui::widget::disableable_label;
+use druid::widget::{Flex};
+use druid::{Widget, WidgetExt, Lens, Data};
+use crate::ui::widget::{FormLabel, FormField, FormTextBox};
 
-pub fn create_task_view() -> impl Widget<Option<TaskViewModel>>
+pub fn create_task_view() -> impl Widget<TaskViewModel>
 {
     return
         Flex::column()
-            .with_child(create_row("Name"));
+            .with_child(create_row(TaskViewModel::name));
 }
 
-fn create_row(text: &str) -> impl Widget<Option<TaskViewModel>>
+fn create_row(lens: impl Lens<TaskViewModel, FormField<String>>) -> impl Widget<TaskViewModel>
 {
-    let label = disableable_label(text).lens(IsSomeLens::new());
-    let text_box = TextBox::new().lens(OptionLens::new(TaskViewModel::name, "".to_string()));
     return Flex::row()
-        .with_child(label)
-        .with_child(text_box);
+        .with_child(FormLabel::new())
+        .with_child(FormTextBox::new())
+        .lens(lens);
 }

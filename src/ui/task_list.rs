@@ -1,4 +1,4 @@
-use crate::view_model::{TaskListViewModel, TaskViewModel};
+use crate::view_model::{TaskListViewModel, TaskListItemViewModel};
 use druid::widget::{Label, List, Scroll};
 use druid::{UnitPoint, WidgetExt, Widget};
 
@@ -10,9 +10,9 @@ pub fn create_task_list() -> impl Widget<TaskListViewModel>
         .lens(TaskListViewModel::items);
 }
 
-fn create_list_item() -> impl Widget<TaskViewModel>
+fn create_list_item() -> impl Widget<TaskListItemViewModel>
 {
-    return Label::dynamic(|name: &String, _| name.to_string()).lens(TaskViewModel::name)
+    return Label::dynamic(|name: &String, _| name.to_string()).lens(TaskListItemViewModel::name)
         .align_vertical(UnitPoint::LEFT)
         .padding(10.0)
         .expand_width();
