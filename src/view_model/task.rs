@@ -1,7 +1,7 @@
 use crate::model::Task;
-use crate::ui::widget::FormField;
+use crate::ui::form::FormField;
 
-#[derive(Clone, Data, Lens)]
+#[derive(Clone)]
 pub struct TaskViewModel {
     pub id: i32,
     pub name: FormField<String>

@@ -2,10 +2,9 @@
 extern crate diesel;
 #[macro_use]
 extern crate diesel_migrations;
-#[macro_use]
-extern crate druid;
 
 use crate::model::Task;
+use crate::view_model::AppViewModel;
 
 mod schema;
 mod db;
@@ -26,6 +25,8 @@ fn main() {
 
     let tasks = Task::get_open(&connection);
 
-    ui::launch(&tasks)
+    let view_model = AppViewModel::new(&tasks);
+
+    ui::run(view_model)
         .unwrap_or_else(|_| panic!("Error launching UI"));
 }

@@ -1,15 +1,15 @@
 use crate::model::Task;
-use std::sync::Arc;
 
-#[derive(Clone, Data, Lens)]
+#[derive(Clone)]
 pub struct TaskListItemViewModel {
     pub id: i32,
     pub name: String,
 }
 
-#[derive(Clone, Data, Lens)]
+#[derive(Clone)]
 pub struct TaskListViewModel {
-    pub items: Arc<Vec<TaskListItemViewModel>>,
+    pub name: String,
+    pub items: Vec<TaskListItemViewModel>,
 }
 
 impl TaskListItemViewModel {
@@ -22,9 +22,10 @@ impl TaskListItemViewModel {
 }
 
 impl TaskListViewModel {
-    pub fn new(tasks: &[Task]) -> TaskListViewModel {
+    pub fn new(name: &str, tasks: &[Task]) -> TaskListViewModel {
         return TaskListViewModel {
-            items: Arc::new(tasks.iter().map(|task| TaskListItemViewModel::new(&task)).collect())
+            name: name.to_string(),
+            items: tasks.iter().map(|task| TaskListItemViewModel::new(&task)).collect()
         };
     }
 }

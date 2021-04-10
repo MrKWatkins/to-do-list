@@ -1,19 +1,50 @@
-use crate::view_model::{TaskListViewModel, TaskListItemViewModel};
-use druid::widget::{Label, List, Scroll};
-use druid::{UnitPoint, WidgetExt, Widget};
+use crate::view_model::TaskListViewModel;
+use gtk::{Orientation, Label, Box as GtkBox, ContainerExt};
+use relm::{Widget, Update, Relm};
+use relm_derive::Msg;
 
-pub fn create_task_list() -> impl Widget<TaskListViewModel>
+
+#[derive(Msg)]
+pub enum TaskListMessage
 {
-    return Scroll::new(
-        List::new(create_list_item))
-        .vertical()
-        .lens(TaskListViewModel::items);
 }
 
-fn create_list_item() -> impl Widget<TaskListItemViewModel>
+pub struct TaskList
 {
-    return Label::dynamic(|name: &String, _| name.to_string()).lens(TaskListItemViewModel::name)
-        .align_vertical(UnitPoint::LEFT)
-        .padding(10.0)
-        .expand_width();
+    model: TaskListViewModel,
+    container: GtkBox
+}
+
+impl Update for TaskList {
+    type Model = TaskListViewModel;
+    type ModelParam = TaskListViewModel;
+    type Msg = TaskListMessage;
+
+    fn model(_relm: &Relm<Self>, param: Self::ModelParam) -> TaskListViewModel {
+        return param;
+    }
+
+    fn update(&mut self, _event: TaskListMessage) {
+    }
+}
+
+impl Widget for TaskList {
+    type Root = GtkBox;
+
+    fn root(&self) -> GtkBox {
+        return self.container.clone();
+    }
+
+    fn view(_relm: &Relm<Self>, model: TaskListViewModel) -> TaskList {
+        let container = GtkBox::new(Orientation::Vertical, 0);
+
+        let label = Label::new(Some(&*model.name));
+
+        container.add(&label);
+
+        return TaskList {
+            model,
+            container,
+        };
+    }
 }

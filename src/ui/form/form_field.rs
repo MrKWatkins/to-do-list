@@ -1,9 +1,4 @@
-use druid::text::{EditableText, StringCursor};
-use druid::Data;
-use std::borrow::Cow;
-use std::ops::Range;
-
-#[derive(Clone, Data, Lens)]
+#[derive(Clone)]
 pub struct FormField<T>
 {
     pub label: String,
