@@ -1,50 +1,27 @@
-use crate::view_model::TaskListViewModel;
-use gtk::{Orientation, Label, Box as GtkBox, ContainerExt};
-use relm::{Widget, Update, Relm};
-use relm_derive::Msg;
+use crate::view_model::{TaskListViewModel};
+use gtk::{ListBox, ListBoxExt, ListBoxRowBuilder, ContainerExt, WidgetExt, BoxExt, Orientation, Label};
+use relm::{connect, Relm};
+use crate::ui::{App, AppMessage};
 
-
-#[derive(Msg)]
-pub enum TaskListMessage
+pub fn initialize_task_list(relm: &Relm<App>, list_box: &mut ListBox, view_model: &TaskListViewModel)
 {
-}
+    for task in &view_model.tasks
+    {
+        let row = ListBoxRowBuilder::new()
+            .name(&*task.name)
+            .build();
 
-pub struct TaskList
-{
-    model: TaskListViewModel,
-    container: GtkBox
-}
+        let row_box = gtk::Box::new(Orientation::Horizontal, 10);
+        row_box.pack_start(&Label::new(Some(&*task.name)), true, true, 0);
+        row.add(&row_box);
 
-impl Update for TaskList {
-    type Model = TaskListViewModel;
-    type ModelParam = TaskListViewModel;
-    type Msg = TaskListMessage;
-
-    fn model(_relm: &Relm<Self>, param: Self::ModelParam) -> TaskListViewModel {
-        return param;
+        list_box.add(&row);
     }
 
-    fn update(&mut self, _event: TaskListMessage) {
-    }
-}
+    let list_type = view_model.list_type.clone();
 
-impl Widget for TaskList {
-    type Root = GtkBox;
+    // Only fire the event if we have a row; None for row indicates selection has been cleared.
+    connect!(relm, list_box, connect_row_selected(_, row), return (row.map(|_| AppMessage::TaskSelected(list_type.clone())), ()));
 
-    fn root(&self) -> GtkBox {
-        return self.container.clone();
-    }
-
-    fn view(_relm: &Relm<Self>, model: TaskListViewModel) -> TaskList {
-        let container = GtkBox::new(Orientation::Vertical, 0);
-
-        let label = Label::new(Some(&*model.name));
-
-        container.add(&label);
-
-        return TaskList {
-            model,
-            container,
-        };
-    }
+    list_box.show_all();
 }
