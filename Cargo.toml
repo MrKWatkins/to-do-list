@@ -10,5 +10,6 @@ diesel = { version = "1.4.6", features = ["sqlite", "chrono"] }
 diesel_migrations = { version = "1.4.0", features = ["sqlite"] }
 dotenv = "0.15.0"
 gtk = "^0.9.0"
+orbtk = "0.3.1-alpha3"
 relm = "^0.21.0"
 relm-derive = "^0.21.0"

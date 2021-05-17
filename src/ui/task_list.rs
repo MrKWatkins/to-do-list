@@ -1,27 +1,55 @@
 use crate::view_model::{TaskListViewModel};
-use gtk::{ListBox, ListBoxExt, ListBoxRowBuilder, ContainerExt, WidgetExt, BoxExt, Orientation, Label};
-use relm::{connect, Relm};
-use crate::ui::{App, AppMessage};
+use orbtk::prelude::*;
 
-pub fn initialize_task_list(relm: &Relm<App>, list_box: &mut ListBox, view_model: &TaskListViewModel)
+const TASK_LIST_ID: &str = "task_list";
+
+pub enum TaskListAction
 {
-    for task in &view_model.tasks
-    {
-        let row = ListBoxRowBuilder::new()
-            .name(&*task.name)
-            .build();
 
-        let row_box = gtk::Box::new(Orientation::Horizontal, 10);
-        row_box.pack_start(&Label::new(Some(&*task.name)), true, true, 0);
-        row.add(&row_box);
+}
 
-        list_box.add(&row);
+#[derive(Default, AsAny)]
+pub struct TaskListState
+{
+    task_list: Entity
+}
+
+impl State for TaskListState
+{
+    fn init(&mut self, _: &mut Registry, ctx: &mut Context) {
+        self.task_list = ctx
+            .entity_of_child(TASK_LIST_ID)
+            .expect("Task list could not be found!");
     }
 
-    let list_type = view_model.list_type.clone();
+    fn update(&mut self, reg: &mut Registry, ctx: &mut Context) {
+    }
+}
 
-    // Only fire the event if we have a row; None for row indicates selection has been cleared.
-    connect!(relm, list_box, connect_row_selected(_, row), return (row.map(|_| AppMessage::TaskSelected(list_type.clone())), ()));
+widget!(TaskList<TaskListState> {
+    title: String16
+});
 
-    list_box.show_all();
+impl Template for TaskList {
+    fn template(self, id: Entity, ctx: &mut BuildContext) -> Self {
+        self.name("TaskList")
+            .title("")
+            .child(
+                Stack::new()
+                    .margin((10.0, 10.0, 10.0, 10.0))
+                    .h_align("center")
+                    .child(
+                        TextBlock::new()
+                            .text(("title", id))
+                            .margin((0.0, 0.0, 0.0, 8.0))
+                            .build(ctx),
+                    )
+                    .child(
+                        ListView::new()
+                            .id(TASK_LIST_ID)
+                            .build(ctx),
+                    )
+                    .build(ctx),
+            )
+    }
 }

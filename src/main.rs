@@ -27,6 +27,6 @@ fn main() {
 
     let view_model = AppViewModel::new(&tasks);
 
-    ui::run(view_model)
-        .unwrap_or_else(|_| panic!("Error launching UI"));
+    ui::run(view_model);
+        //.unwrap_or_else(|_| panic!("Error launching UI"));
 }

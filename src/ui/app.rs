@@ -1,14 +1,51 @@
 use crate::view_model::{AppViewModel, TaskListType};
-use relm::{connect, Relm, Update, Widget};
-use relm_derive::Msg;
-use gtk::prelude::*;
-use gtk::{Window, Inhibit, Builder, ListBox};
-use crate::ui::task_list::initialize_task_list;
+use crate::ui::task_list::TaskList;
+use orbtk::prelude::*;
+use orbtk::prelude::Widget;
 
-pub fn run(view_model: AppViewModel) -> Result<(), ()> {
-    return App::run(view_model);
+pub fn run(view_model: AppViewModel) {
+    //return App::run(view_model);
+    return Application::new()
+        .window(|ctx| {
+            Window::new()
+                .title("To Do List")
+                .position((100.0, 100.0))
+                .size(420.0, 240.0)
+                .resizeable(true)
+                .child(
+                    Grid::new()
+                        .columns(Columns::create().push("auto").push("auto").push("auto"))
+                        .rows(Rows::create().push("auto").push("auto"))
+                        .v_align("start")
+                        .h_align("start")
+                        .child(
+                            TaskList::new()
+                                .title("Today")
+                                .attach(Grid::column(0))
+                                .attach(Grid::row(0))
+                                .build(ctx)
+                        )
+                        .child(
+                            TaskList::new()
+                                .title("This Week")
+                                .attach(Grid::column(1))
+                                .attach(Grid::row(0))
+                                .build(ctx)
+                        )
+                        .child(
+                            TaskList::new()
+                                .title("Other")
+                                .attach(Grid::column(2))
+                                .attach(Grid::row(0))
+                                .build(ctx)
+                        )
+                        .build(ctx)
+                )
+                .build(ctx)
+        })
+        .run();
 }
-
+/*
 #[derive(Msg)]
 pub enum AppMessage
 {
@@ -95,3 +132,4 @@ impl Widget for App {
     }
 }
 
+*/
